@@ -76,11 +76,11 @@ HTML_TEMPLATE = """
         
         <div class="info-box">
             <strong>Technology Stack:</strong>
-            <div class="tech-stack">
-                <div class="tech-item">Flask</div>
-                <div class="tech-item">Jenkins</div>
-                <div class="tech-item">Docker</div>
-                <div class="tech-item">Linux</div>
+                <div class="tech-stack">
+                <a href="https://flask.palletsprojects.com/" target="_blank" class="tech-item">Flask</a>
+                <a href="https://www.jenkins.io/" target="_blank" class="tech-item">Jenkins</a>
+                <a href="https://www.docker.com/" target="_blank" class="tech-item">Docker</a>
+                <a href="https://www.linux.com/" target="_blank" class="tech-item">Linux</a>
             </div>
         </div>
         
