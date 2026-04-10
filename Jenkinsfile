@@ -30,6 +30,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh "docker pull $IMAGE:$TAG"
+                sh "docker stop cwvj-flask || true"
                 sh "docker rm -f cwvj-flask || true"
                 sh "docker run -d --name cwvj-flask -p 5000:5000 $IMAGE:$TAG"
 
