@@ -32,8 +32,6 @@ stage('deploy') {
           (
             echo build: %BUILD_NUMBER%
             echo image: %IMAGE%:%TAG%
-            echo commit: %GIT_COMMIT%
-            echo branch: %GIT_BRANCH%
             echo time: %date% %time%
             echo url: %BUILD_URL%
           ) > deploy-info-%BUILD_NUMBER%.txt
