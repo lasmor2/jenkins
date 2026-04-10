@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'windows' }
+    agent any
     environment {
         IMAGE="docker.io/cloudwithvarjosh/cwvj-flask"
         TAG="${BUILD_NUMBER}"
