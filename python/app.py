@@ -71,7 +71,7 @@ HTML_TEMPLATE = """
 <body>
     <div class="container">
         <div class="emoji">✨</div>
-        <h1>Welcome to Cloud with VarJosh</h1>
+        <h1>Welcome to Cloud with okelola lekan</h1>
         <p>Your Flask application is running successfully on Docker!</p>
         
         <div class="info-box">
