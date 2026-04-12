@@ -26,7 +26,9 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                dockerDeploy(IMAGE, TAG, CONTAINER_NAME, PORT, BUILD_NUMBER, GIT_COMMIT, GIT_BRANCH, BUILD_URL)
+                dockerDeploy(image: IMAGE, tag: TAG, containerName: CONTAINER_NAME, port: PORT,
+                             buildNumber: BUILD_NUMBER, gitCommit: GIT_COMMIT,
+                             gitBranch: GIT_BRANCH, buildUrl: BUILD_URL)
             }
         }
 

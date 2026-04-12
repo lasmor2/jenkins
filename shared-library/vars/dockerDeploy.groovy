@@ -1,20 +1,21 @@
-def call(String image, String tag, String containerName, String port, String buildNumber, String gitCommit, String gitBranch, String buildUrl) {
-    sh "docker pull ${image}:${tag}"
-    sh "docker stop ${containerName} || true"
-    sh "docker rm -f ${containerName} || true"
-    sh "docker run -d --name ${containerName} -p ${port}:${port} ${image}:${tag}"
+def call(Map cfg) {
+    validateDockerInput(cfg.image, cfg.tag)
+    sh "docker pull ${cfg.image}:${cfg.tag}"
+    sh "docker stop ${cfg.containerName} || true"
+    sh "docker rm -f ${cfg.containerName} || true"
+    sh "docker run -d --name ${cfg.containerName} -p ${cfg.port}:${cfg.port} ${cfg.image}:${cfg.tag}"
 
     sh """
-cat > deploy-info-${buildNumber}.txt <<EOF
-build:  ${buildNumber}
-image:  ${image}:${tag}
-commit: ${gitCommit}
-branch: ${gitBranch}
+cat > deploy-info-${cfg.buildNumber}.txt <<EOF
+build:  ${cfg.buildNumber}
+image:  ${cfg.image}:${cfg.tag}
+commit: ${cfg.gitCommit}
+branch: ${cfg.gitBranch}
 time:   \$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-url:    ${buildUrl}
+url:    ${cfg.buildUrl}
 EOF
 """
-    archiveArtifacts artifacts: "deploy-info-${buildNumber}.txt",
+    archiveArtifacts artifacts: "deploy-info-${cfg.buildNumber}.txt",
                      fingerprint: true,
                      followSymlinks: false
 }
