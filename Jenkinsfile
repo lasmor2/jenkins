@@ -1,5 +1,5 @@
 // groovylint-disable CompileStatic, NoDef, UnusedVariable, VariableName, VariableTypeRequired
-@Library('cwvj-shared-library@main') _
+@Library('cwvj-shared-lib') _
 
 pipeline {
     agent any
