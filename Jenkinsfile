@@ -1,52 +1,32 @@
+// groovylint-disable CompileStatic, NoDef, UnusedVariable, VariableName, VariableTypeRequired
+@Library('cwvj-shared-library@main') _
+
 pipeline {
     agent any
 
     environment {
-        IMAGE = 'docker.io/lasmor2025/cwvj-flask'
-        TAG   = "${BUILD_NUMBER}"
+        IMAGE          = 'docker.io/lasmor2025/cwvj-flask'
+        TAG            = "${BUILD_NUMBER}"
+        CONTAINER_NAME = 'cwvj-flask'
+        PORT           = '5000'
     }
 
     stages {
         stage('Build') {
             steps {
-                sh "docker build -t $IMAGE:$TAG -t $IMAGE:latest ./python"
+                dockerBuild(IMAGE, TAG)
             }
         }
 
         stage('Push') {
             steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'dockerhub',
-                    usernameVariable: 'DOCKERHUB_USER',
-                    passwordVariable: 'DOCKERHUB_PWD'
-                )]) {
-                    sh "echo $DOCKERHUB_PWD | docker login -u $DOCKERHUB_USER --password-stdin"
-                    sh "docker push $IMAGE:$TAG"
-                    sh "docker push $IMAGE:latest"
-                }
+                dockerPush(IMAGE, TAG)
             }
         }
 
         stage('Deploy') {
             steps {
-                sh "docker pull $IMAGE:$TAG"
-                sh "docker stop cwvj-flask || true"
-                sh "docker rm -f cwvj-flask || true"
-                sh "docker run -d --name cwvj-flask -p 5000:5000 $IMAGE:$TAG"
-
-                sh """
-cat > deploy-info-${BUILD_NUMBER}.txt <<EOF
-build:  ${BUILD_NUMBER}
-image:  ${IMAGE}:${TAG}
-commit: ${GIT_COMMIT}
-branch: ${GIT_BRANCH}
-time:   \$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-url:    ${BUILD_URL}
-EOF
-"""
-                archiveArtifacts artifacts: "deploy-info-${BUILD_NUMBER}.txt",
-                                 fingerprint: true,
-                                 followSymlinks: false
+                dockerDeploy(IMAGE, TAG, CONTAINER_NAME, PORT, BUILD_NUMBER, GIT_COMMIT, GIT_BRANCH, BUILD_URL)
             }
         }
 
@@ -58,7 +38,7 @@ EOF
 
         stage('Cleanup') {
             steps {
-                cleanWs()
+                dockerCleanup()
             }
         }
     }
